@@ -1,0 +1,9 @@
+Basic functionality: 
+    Home page:
+        - display expense/income table at home page;
+        - display account balance;
+        - specify a currency;
+        - be able to filter the table values by date / category / type / sum of money;
+        - be able to add new expense info (specify a sum of money, a type (expense or income), a category and date (optionally));
+    Statistics page:
+        - display one filter-sensitive dynamic chart (you can filter the info by date / category / type; you can also choose the chart type (pie or columns))
