@@ -3,6 +3,7 @@
 :root {
   --background-color: rgb(238, 238, 238);
   --card-bg-color: rgb(228, 228, 228);
+  --balance-heading-font-size: 2em;
 }
 html {
   scroll-behavior: smooth;
@@ -50,7 +51,7 @@ body,
       @include mixins.space_between;
       align-items: center;
       .balance-heading {
-        font-size: 2em;
+        font-size: var(--balance-heading-font-size);
         margin-left: 30px;
       }
       .filter-dropdown {
@@ -61,6 +62,7 @@ body,
       }
     }
     .chart-container {
+      background-color: aqua;
       margin-top: 20px;
       height: 400px;
       display: flex;
@@ -78,85 +80,105 @@ body,
   justify-content: center;
   &__container {
     width: 85%;
-    .sort-container {
-      @include mixins.space_between;
-      padding: 0 30px;
-      .sort-current-value {
-        font-size: 1.4em;
-      }
-      .sort-dropdown {
-        svg {
-          width: 40px;
-          height: 40px;
-          fill: rgb(169, 169, 169);
-        }
-        .dropdown-list {
-          position: absolute;
-          right: 10%;
-          background-color: var(--card-bg-color);
-          min-width: 160px;
-          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-          z-index: 2;
-          border-radius: 7px;
-          li {
-            padding: 10px 7px;
-            &:hover {
-              cursor: pointer;
-              background-color: rgb(75, 151, 252);
-              color: #fff;
-            }
-          }
-        }
-      }
-    }
     .finance-cards-container {
       margin-top: 30px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      .finance-card {
-        background-color: var(--card-bg-color);
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 7px;
-        width: 95%;
-        margin-bottom: 20px;
-        height: 50px;
-        border-radius: 7px;
-        display: grid;
-        padding: 0 20px;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-        align-items: center;
-        font-size: 1.3em;
-        .date {
-          grid-column: 1/2;
-        }
-        .name {
-          grid-column: 2/4;
-          flex-grow: 0;
-          padding-left: 20px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .sum {
-          padding-left: 10px;
-          grid-column: 4/5;
-        }
-        .action-edit {
+    }
+  }
+}
+.sort-container {
+  @include mixins.space_between;
+  padding: 0 30px;
+  .sort-current-value {
+    font-size: 1.4em;
+  }
+  .sort-dropdown {
+    svg {
+      width: 40px;
+      height: 40px;
+      fill: rgb(169, 169, 169);
+    }
+    .dropdown-list {
+      position: absolute;
+      right: 10%;
+      background-color: var(--card-bg-color);
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+      border-radius: 7px;
+      li {
+        padding: 10px 7px;
+        &:hover {
           cursor: pointer;
-          grid-column: 5/6;
-          padding-left: 50px;
-          color: rgb(61, 132, 219);
-          &:hover {
-            color: rgb(43, 98, 167);
-          }
+          background-color: rgb(75, 151, 252);
+          color: #fff;
         }
-        .action-delete {
-          cursor: pointer;
-          grid-column: 6/7;
-          padding-left: 50px;
-          color: rgb(225, 56, 56);
-          &:hover {
-            color: rgb(192, 24, 24);
-          }
+      }
+    }
+  }
+}
+.finance-card {
+  background-color: var(--card-bg-color);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 7px;
+  width: 95%;
+  margin-bottom: 20px;
+  height: 50px;
+  border-radius: 7px;
+  display: grid;
+  padding: 0 20px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  font-size: 1.3em;
+  .date {
+    grid-column: 1/2;
+  }
+  .name {
+    grid-column: 2/4;
+    flex-grow: 0;
+    padding-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 90%;
+  }
+  .sum {
+    padding-left: 10px;
+    grid-column: 4/5;
+  }
+  .action-edit {
+    cursor: pointer;
+    grid-column: 5/6;
+    padding-left: 50px;
+    color: rgb(61, 132, 219);
+    &:hover {
+      color: rgb(43, 98, 167);
+    }
+  }
+  .action-delete {
+    cursor: pointer;
+    grid-column: 6/7;
+    padding-left: 50px;
+    color: rgb(225, 56, 56);
+    &:hover {
+      color: rgb(192, 24, 24);
+    }
+  }
+  .buttons-container {
+    display: none;
+    .btn-container {
+      grid-column: 6/7;
+      width: 25px;
+      height: 25px;
+      svg {
+        width: 100%;
+        height: 100%;
+        &.edit-button {
+          fill: rgb(61, 132, 219);
+        }
+        &.delete-button {
+          fill: rgb(225, 56, 56);
         }
       }
     }
@@ -168,3 +190,4 @@ body,
 .--balance-green {
   color: rgb(137, 246, 98);
 }
+@import "_media-queries";

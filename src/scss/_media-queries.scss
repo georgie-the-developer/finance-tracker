@@ -1,0 +1,117 @@
+// Big tabs
+@media screen and (max-width: 1000px) {
+  :root {
+    --balance-heading-font-size: 1.5em;
+  }
+  .hero {
+    .hero-card {
+      width: 90%;
+    }
+  }
+  .sort-container {
+    padding: 0 5px;
+  }
+}
+// Tabs
+@media screen and (max-width: 800px) {
+  .hero {
+    height: 470px;
+    .hero-card {
+      margin-top: 15px;
+      .chart-container {
+        height: 360px;
+      }
+    }
+  }
+  .finance-card {
+    width: 100%;
+    font-size: 1.1em;
+  }
+}
+// Big phones / small tabs
+@media screen and (max-width: 600px) {
+  .finance-records {
+    &__container {
+      width: 95%;
+    }
+  }
+  :root {
+    --balance-heading-font-size: 1.2em;
+  }
+  .hero {
+    height: 380px;
+    .hero-card {
+      .hero-heading {
+        height: 30px;
+        .filter-dropdown {
+          margin-right: 20px;
+          padding: 7px 5px;
+          font-size: 1em;
+        }
+      }
+      width: 98%;
+      .chart-container {
+        height: 290px;
+      }
+    }
+  }
+  .finance-card {
+    font-size: 1em;
+    padding: 0 5px;
+    .date {
+      font-size: 0.9em;
+    }
+    .name {
+      grid-column: 2/5;
+    }
+    .sum {
+      padding: 0;
+      grid-column: 5/6;
+    }
+    .action-edit,
+    .action-delete {
+      display: none;
+    }
+    .buttons-container {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+// Phones
+@media screen and (max-width: 450px) {
+  :root {
+    --balance-heading-font-size: 1em;
+  }
+  .hero {
+    .hero-card {
+      height: 360px;
+      .hero-heading {
+        height: 20px;
+        .balance-heading {
+          margin-left: 5px;
+        }
+        .filter-dropdown {
+          margin-right: 5px;
+          padding: 7px 5px;
+          font-size: 1em;
+        }
+      }
+      width: 98%;
+      .chart-container {
+        height: 290px;
+      }
+    }
+  }
+  .finance-card {
+    .name {
+      width: 80%;
+    }
+    .buttons-container {
+      .btn-container {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
