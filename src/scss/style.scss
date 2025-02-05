@@ -1,1 +1,170 @@
+@forward "_fonts";
+@use "_mixins";
+:root {
+  --background-color: rgb(238, 238, 238);
+  --card-bg-color: rgb(228, 228, 228);
+}
+html {
+  scroll-behavior: smooth;
 
+  &.scroll-disabeled {
+    height: 100%;
+    overflow-y: hidden;
+  }
+}
+
+html,
+body,
+::before,
+::after {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.main {
+  width: 100vw;
+  min-height: 100vh;
+  font-family: "Roboto";
+  .bg-overlay {
+    position: fixed;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--background-color);
+  }
+}
+.hero {
+  height: 560px;
+  display: flex;
+  justify-content: center;
+  .hero-card {
+    margin-top: 70px;
+    width: 80%;
+    border-radius: 10px;
+    background-color: var(--card-bg-color);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    .hero-heading {
+      height: 40px;
+      margin-top: 20px;
+      @include mixins.space_between;
+      align-items: center;
+      .balance-heading {
+        font-size: 2em;
+        margin-left: 30px;
+      }
+      .filter-dropdown {
+        margin-right: 20px;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 1.2em;
+      }
+    }
+    .chart-container {
+      margin-top: 20px;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      .line-chart {
+        width: 90%;
+      }
+    }
+  }
+}
+.finance-records {
+  margin-top: 50px;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  &__container {
+    width: 85%;
+    .sort-container {
+      @include mixins.space_between;
+      padding: 0 30px;
+      .sort-current-value {
+        font-size: 1.4em;
+      }
+      .sort-dropdown {
+        svg {
+          width: 40px;
+          height: 40px;
+          fill: rgb(169, 169, 169);
+        }
+        .dropdown-list {
+          position: absolute;
+          right: 10%;
+          background-color: var(--card-bg-color);
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          z-index: 2;
+          border-radius: 7px;
+          li {
+            padding: 10px 7px;
+            &:hover {
+              cursor: pointer;
+              background-color: rgb(75, 151, 252);
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+    .finance-cards-container {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .finance-card {
+        background-color: var(--card-bg-color);
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 7px;
+        width: 95%;
+        margin-bottom: 20px;
+        height: 50px;
+        border-radius: 7px;
+        display: grid;
+        padding: 0 20px;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        align-items: center;
+        font-size: 1.3em;
+        .date {
+          grid-column: 1/2;
+        }
+        .name {
+          grid-column: 2/4;
+          flex-grow: 0;
+          padding-left: 20px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .sum {
+          padding-left: 10px;
+          grid-column: 4/5;
+        }
+        .action-edit {
+          cursor: pointer;
+          grid-column: 5/6;
+          padding-left: 50px;
+          color: rgb(61, 132, 219);
+          &:hover {
+            color: rgb(43, 98, 167);
+          }
+        }
+        .action-delete {
+          cursor: pointer;
+          grid-column: 6/7;
+          padding-left: 50px;
+          color: rgb(225, 56, 56);
+          &:hover {
+            color: rgb(192, 24, 24);
+          }
+        }
+      }
+    }
+  }
+}
+.--balance-red {
+  color: rgb(255, 30, 0);
+}
+.--balance-green {
+  color: rgb(137, 246, 98);
+}
