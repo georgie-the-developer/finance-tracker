@@ -1,9 +1,8 @@
 import React from "react";
 import { useId } from "react";
 export default function FinanceCard({ date, name, sum }) {
-  const key = useId();
   return (
-    <div className="finance-card" key={key}>
+    <div className="finance-card">
       <div className="date">{date}</div>
       <div className="name">{name}</div>
       <div
