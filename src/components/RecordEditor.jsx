@@ -22,11 +22,8 @@ export default function RecordEditor({
       records = [];
     }
     let id = Date.now();
-    let dateToSet = new Intl.DateTimeFormat("default", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "2-digit",
-    }).format(new Date(date + "T00:00:00"));
+    console.log(new Date(new Date(date).getTime()).toISOString().split("T")[0]);
+    let dateToSet = new Date(date).getTime();
     records.push({ id: id, date: dateToSet, name: name, sum: sum });
     localStorage.setItem(config.RECORDS_STORAGE_NAME, JSON.stringify(records));
     setIndicator((prevVal) => prevVal + 1);

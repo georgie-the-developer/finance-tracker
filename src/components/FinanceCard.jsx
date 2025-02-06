@@ -1,6 +1,11 @@
 import React from "react";
-import { useId } from "react";
-export default function FinanceCard({ date, name, sum }) {
+export default function FinanceCard({ date: timestamp, name, sum }) {
+  const date = new Intl.DateTimeFormat("default", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+    timeZone: "Europe/London",
+  }).format(new Date(timestamp));
   return (
     <div className="finance-card">
       <div className="date">{date}</div>

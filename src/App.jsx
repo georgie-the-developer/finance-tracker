@@ -40,6 +40,20 @@ function App() {
         return "Most recent";
     }
   };
+  const sortRecords = (a, b, sortBy) => {
+    switch (sortBy) {
+      case "most-recent":
+        return b.date - a.date || b.id - a.id;
+      case "oldest":
+        return a.date - b.date || a.id - b.id;
+      case "sum-desc":
+        return b.sum - a.sum;
+      case "sum-asc":
+        return a.sum - b.sum;
+      default:
+        return b.date - a.date || b.id - a.id;
+    }
+  };
   const openRecordEditor = (name = "", sum = "", date = "") => {
     setRecordEditorOpen(true);
     setRecordEditorData({
@@ -117,7 +131,7 @@ function App() {
             <div className="finance-cards-container">
               <Suspense fallback={<div className="loading">Loading ...</div>}>
                 {records
-                  .sort((a, b) => b.id - a.id)
+                  .sort((a, b) => sortRecords(a, b, sortBy))
                   .map((record) => {
                     return (
                       <FinanceCard
