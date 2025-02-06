@@ -378,6 +378,8 @@ body,
     display: none;
   }
   .finance-card .buttons-container {
+    margin-left: 5px;
+    grid-column: 6/7;
     display: flex;
     justify-content: space-between;
   }

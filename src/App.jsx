@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, use, Suspense, useEffect } from "react";
 import FinanceCard from "./components/FinanceCard";
 import RecordEditor from "./components/RecordEditor";
+import config from "./config.json";
 function App() {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState("most-recent");
@@ -10,6 +11,17 @@ function App() {
     sum: "",
     date: "",
   });
+  const [records, setRecords] = useState(
+    JSON.parse(localStorage.getItem(config.RECORDS_STORAGE_NAME)) ?? []
+  );
+  //Used to update records whenever a new one is added without a reload
+  const [indicator, setIndicator] = useState(0);
+  useEffect(() => {
+    const storedRecords = localStorage.getItem(config.RECORDS_STORAGE_NAME);
+    if (storedRecords) {
+      setRecords(JSON.parse(storedRecords));
+    }
+  }, [indicator]);
   const changeSortState = (val) => {
     setSortBy(val);
     setIsSortOpen(false);
@@ -103,22 +115,20 @@ function App() {
               </div>
             </div>
             <div className="finance-cards-container">
-              <FinanceCard date="11/02/25" name="Name dsafhfasdf" sum={-567} />
-              <FinanceCard date="10/02/25" name="Name dsafhfasdf" sum={567} />
-              <FinanceCard date="10/02/25" name="Namedsafhfasdf" sum={-567} />
-              <FinanceCard
-                date="9/02/25"
-                name="Name dsafhfasdffdsa"
-                sum={567}
-              />
-              <FinanceCard
-                date="7/02/25"
-                name="Name dsafhfasdfasdf"
-                sum={567}
-              />
-              <FinanceCard date="5/02/25" name="Ndsafhfa" sum={567} />
-              <FinanceCard date="5/02/25" name="Ndsafhfa" sum={567} />
-              <FinanceCard date="5/02/25" name="Ndsafhfa" sum={567} />
+              <Suspense fallback={<div className="loading">Loading ...</div>}>
+                {records
+                  .sort((a, b) => b.id - a.id)
+                  .map((record) => {
+                    return (
+                      <FinanceCard
+                        key={record.id}
+                        date={record.date}
+                        name={record.name}
+                        sum={record.sum}
+                      />
+                    );
+                  })}
+              </Suspense>
             </div>
           </div>
         </section>
@@ -132,6 +142,8 @@ function App() {
               name={recordEditorData.name}
               sum={recordEditorData.sum}
               date={recordEditorData.date}
+              setIndicator={setIndicator}
+              closeAlert={closeRecordEditor}
             />
           </>
         </div>

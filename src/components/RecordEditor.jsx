@@ -1,9 +1,11 @@
 import { useState } from "react";
-
+import config from "../config.json";
 export default function RecordEditor({
   name: initialName,
   sum: initialSum,
   date: initialDate,
+  setIndicator,
+  closeAlert,
 }) {
   const [name, setName] = useState(initialName);
   const [sum, setSum] = useState(initialSum);
@@ -12,8 +14,26 @@ export default function RecordEditor({
       ? new Date(initialDate).toISOString().split("T")[0]
       : new Date(Date.now()).toISOString().split("T")[0]
   );
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let retrievedVals = localStorage.getItem(config.RECORDS_STORAGE_NAME);
+    let records = JSON.parse(retrievedVals);
+    if (!records) {
+      records = [];
+    }
+    let id = Date.now();
+    let dateToSet = new Intl.DateTimeFormat("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    }).format(new Date());
+    records.push({ id: id, date: dateToSet, name: name, sum: sum });
+    localStorage.setItem(config.RECORDS_STORAGE_NAME, JSON.stringify(records));
+    setIndicator((prevVal) => prevVal + 1);
+    closeAlert();
+  };
   return (
-    <form className="editor-form">
+    <form className="editor-form" onSubmit={handleSubmit}>
       <div className="inputs-container">
         <div className="input-group">
           <label className="input-group__label" htmlFor="finance-record-name">
@@ -27,6 +47,7 @@ export default function RecordEditor({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="<15 characters for better readability..."
+            required
           />
         </div>
         <div className="input-group">
@@ -41,6 +62,8 @@ export default function RecordEditor({
             value={sum}
             onChange={(e) => setSum(e.target.value)}
             placeholder="Sum of money (can be negative)"
+            max={100000}
+            required
           />
         </div>
         <div className="input-group">
@@ -54,6 +77,7 @@ export default function RecordEditor({
             name="finance-record-date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
+            required
           />
         </div>
       </div>
