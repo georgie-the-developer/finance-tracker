@@ -8,10 +8,6 @@
 html {
   scroll-behavior: smooth;
 }
-html.scroll-disabeled {
-  height: 100%;
-  overflow-y: hidden;
-}
 
 html,
 body,
@@ -27,6 +23,10 @@ body,
   width: 100vw;
   min-height: 100vh;
   font-family: "Roboto";
+}
+.main.no-scroll {
+  max-height: 100vh;
+  overflow: hidden;
 }
 .main .bg-overlay {
   position: fixed;
@@ -216,6 +216,99 @@ body,
   color: rgb(32, 206, 26);
 }
 
+.editor-alert {
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 99;
+  transition: opacity 0.3s ease-in-out;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+}
+.editor-alert.open {
+  height: 100%;
+  opacity: 1;
+  pointer-events: auto;
+}
+.editor-alert.open .editor-form {
+  max-height: 60%;
+  height: 60%;
+  opacity: 1;
+  transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+.editor-alert .editor-alert-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(31, 31, 31, 0.3);
+  transition: background-color 0.5s ease-in-out;
+}
+
+.editor-form {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  background-color: var(--background-color);
+  transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+.editor-form .inputs-container {
+  width: min(90%, 1000px);
+  height: auto;
+  padding: 40px 0;
+  border: 0.5px solid #201f1f;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+.editor-form .inputs-container .input-group {
+  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.editor-form .inputs-container .input-group__label {
+  font-size: 1.5em;
+}
+.editor-form .inputs-container .input-group__input {
+  font-size: 1em;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 10px;
+}
+.editor-form .submit-container {
+  margin-top: 50px;
+  width: min(90%, 1000px);
+  display: flex;
+  justify-content: flex-end;
+}
+.editor-form .submit-container .submit {
+  padding: 10px 20px;
+  background-color: #4bb1ff;
+  border: none;
+  border-radius: 7px;
+  color: #fff;
+  font-size: 1em;
+}
+.editor-form .submit-container .submit:hover {
+  background-color: #3789c8;
+}
+
 @media screen and (max-width: 1000px) {
   :root {
     --balance-heading-font-size: 1.5em;
@@ -288,6 +381,9 @@ body,
     display: flex;
     justify-content: space-between;
   }
+  .editor-form .inputs-container .input-group__label {
+    font-size: 1em;
+  }
 }
 @media screen and (max-width: 450px) {
   :root {
@@ -317,5 +413,12 @@ body,
   .finance-card .buttons-container .btn-container {
     width: 20px;
     height: 20px;
+  }
+}
+@media screen and (max-height: 800px) {
+  .editor-alert.open .editor-form {
+    max-height: 100%;
+    height: 100%;
+    overflow: scroll;
   }
 }/*# sourceMappingURL=style.css.map */

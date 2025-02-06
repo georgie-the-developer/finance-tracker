@@ -77,6 +77,15 @@
       justify-content: space-between;
     }
   }
+  .editor-form {
+    .inputs-container {
+      .input-group {
+        &__label {
+          font-size: 1em;
+        }
+      }
+    }
+  }
 }
 // Phones
 @media screen and (max-width: 450px) {
@@ -111,6 +120,19 @@
       .btn-container {
         width: 20px;
         height: 20px;
+      }
+    }
+  }
+}
+
+// For small heights
+@media screen and (max-height: 800px) {
+  .editor-alert {
+    &.open {
+      .editor-form {
+        max-height: 100%;
+        height: 100%;
+        overflow: scroll;
       }
     }
   }

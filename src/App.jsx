@@ -1,8 +1,15 @@
 import { useState } from "react";
 import FinanceCard from "./components/FinanceCard";
+import RecordEditor from "./components/RecordEditor";
 function App() {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState("most-recent");
+  const [recordEditorOpen, setRecordEditorOpen] = useState(false);
+  const [recordEditorData, setRecordEditorData] = useState({
+    name: "",
+    sum: "",
+    date: "",
+  });
   const changeSortState = (val) => {
     setSortBy(val);
     setIsSortOpen(false);
@@ -21,10 +28,30 @@ function App() {
         return "Most recent";
     }
   };
-
+  const openRecordEditor = (name = "", sum = "", date = "") => {
+    setRecordEditorOpen(true);
+    setRecordEditorData({
+      name: name,
+      sum: sum,
+      date: date || Date.now(),
+    });
+  };
+  const closeRecordEditor = () => {
+    setRecordEditorOpen(false);
+    setRecordEditorData({
+      name: "",
+      sum: "",
+      date: "",
+    });
+  };
+  const anyAlertOpen = () => {
+    if (recordEditorOpen) {
+      return true;
+    }
+  };
   return (
     <>
-      <div className="main">
+      <div className={"main" + (anyAlertOpen() ? " no-scroll" : "")}>
         <div className="bg-overlay"></div>
         <section className="hero">
           <div className="hero-card">
@@ -95,7 +122,23 @@ function App() {
             </div>
           </div>
         </section>
-        <div className="create-finance-record">
+        <div className={"editor-alert" + (recordEditorOpen ? " open" : "")}>
+          <>
+            <div
+              className="editor-alert-overlay"
+              onClick={() => closeRecordEditor()}
+            ></div>
+            <RecordEditor
+              name={recordEditorData.name}
+              sum={recordEditorData.sum}
+              date={recordEditorData.date}
+            />
+          </>
+        </div>
+        <div
+          className="create-finance-record"
+          onClick={() => openRecordEditor()}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             {/* <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--> */}
             <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" />

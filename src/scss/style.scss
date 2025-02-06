@@ -7,11 +7,6 @@
 }
 html {
   scroll-behavior: smooth;
-
-  &.scroll-disabeled {
-    height: 100%;
-    overflow-y: hidden;
-  }
 }
 
 html,
@@ -24,6 +19,10 @@ body,
   scrollbar-width: none;
 }
 .main {
+  &.no-scroll {
+    max-height: 100vh;
+    overflow: hidden;
+  }
   width: 100vw;
   min-height: 100vh;
   font-family: "Roboto";
@@ -207,5 +206,100 @@ body,
 }
 .--balance-green {
   color: rgb(32, 206, 26);
+}
+.editor-alert {
+  height: 0;
+  opacity: 0;
+  pointer-events: none; // Prevent interaction when closed
+  overflow: hidden;
+  z-index: 99;
+  transition: opacity 0.3s ease-in-out;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+
+  &.open {
+    height: 100%;
+    opacity: 1;
+    pointer-events: auto;
+
+    .editor-form {
+      max-height: 60%;
+      height: 60%;
+      opacity: 1;
+      transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out,
+        padding 0.3s ease-in-out;
+    }
+  }
+
+  .editor-alert-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(31, 31, 31, 0.3);
+    transition: background-color 0.5s ease-in-out;
+  }
+}
+.editor-form {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  background-color: var(--background-color);
+  transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  .inputs-container {
+    width: min(90%, 1000px);
+    height: auto;
+    padding: 40px 0;
+    border: 0.5px solid #201f1f;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    .input-group {
+      margin: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      &__label {
+        font-size: 1.5em;
+      }
+      &__input {
+        font-size: 1em;
+        border: 1px solid #000;
+        border-radius: 5px;
+        padding: 10px;
+      }
+    }
+  }
+  .submit-container {
+    margin-top: 50px;
+    width: min(90%, 1000px);
+    display: flex;
+    justify-content: flex-end;
+    .submit {
+      padding: 10px 20px;
+      background-color: #4bb1ff;
+      border: none;
+      border-radius: 7px;
+      color: #fff;
+      font-size: 1em;
+      &:hover {
+        background-color: #3789c8;
+      }
+    }
+  }
 }
 @import "_media-queries";
