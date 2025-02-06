@@ -27,6 +27,9 @@ export default function RecordEditor({
     records.push({ id: id, date: dateToSet, name: name, sum: sum });
     localStorage.setItem(config.RECORDS_STORAGE_NAME, JSON.stringify(records));
     setIndicator((prevVal) => prevVal + 1);
+    setName("");
+    setSum("");
+    setDate(new Date(Date.now()).toISOString().split("T")[0]);
     closeAlert();
   };
   return (
