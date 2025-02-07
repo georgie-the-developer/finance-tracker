@@ -16,6 +16,21 @@ function App() {
   const [records, setRecords] = useState(
     JSON.parse(localStorage.getItem(config.RECORDS_STORAGE_NAME)) ?? []
   );
+  //Overall balance
+  const [overallBalance, setOverallBalance] = useState(
+    JSON.parse(localStorage.getItem(config.BALANCE_VALUE_STORAGE_NAME)) ?? 0
+  );
+  const calculateOverallBalance = (records) => {
+    if (!records) {
+      setOverallBalance(0);
+      return;
+    }
+    let total = 0;
+    for (let record of records) {
+      total += Number(record.sum);
+    }
+    setOverallBalance(total);
+  };
   //Used to update records whenever a new one is added without a reload
   const [indicator, setIndicator] = useState(0);
   //Alert for confirming a deletion of a record
@@ -25,6 +40,9 @@ function App() {
       setRecords(JSON.parse(storedRecords));
     }
   }, [indicator]);
+  useEffect(() => {
+    calculateOverallBalance(records);
+  }, [records]);
   const changeSortState = (val) => {
     setSortBy(val);
     setIsSortOpen(false);
@@ -104,7 +122,18 @@ function App() {
             <div className="hero-heading">
               <div className="balance-heading">
                 Your balance is:
-                <span className="balance-value"> $balanceValue</span>
+                <span
+                  className={
+                    "balance-value" +
+                    (overallBalance < 0 ? " --balance-red" : "") +
+                    (overallBalance > 0 ? " --balance-green" : "")
+                  }
+                >
+                  {" "}
+                  {overallBalance < 0
+                    ? "-$" + Math.abs(overallBalance)
+                    : "$" + overallBalance}
+                </span>
               </div>
               <select name="" id="" className="filter-dropdown">
                 <option value="all-time">All time</option>
