@@ -1,5 +1,12 @@
 import React from "react";
-export default function FinanceCard({ date: timestamp, name, sum }) {
+export default function FinanceCard({
+  id,
+  date: timestamp,
+  name,
+  sum,
+  editRecord,
+  deleteRecord,
+}) {
   const date = new Intl.DateTimeFormat("default", {
     day: "2-digit",
     month: "2-digit",
@@ -15,10 +22,26 @@ export default function FinanceCard({ date: timestamp, name, sum }) {
       >
         {(sum < 0 ? "-$" : "+$") + Math.abs(sum)}
       </div>
-      <div className="action-edit">Edit</div>
-      <div className="action-delete">Delete</div>
+      <div
+        className="action-edit"
+        onClick={() => editRecord(id, name, sum, date)}
+      >
+        Edit
+      </div>
+      <div
+        className="action-delete"
+        onClick={() => {
+          confirm("Are you sure?");
+          deleteRecord(id);
+        }}
+      >
+        Delete
+      </div>
       <div className="buttons-container">
-        <div className="btn-container">
+        <div
+          className="btn-container"
+          onClick={() => editRecord(id, name, sum, date)}
+        >
           <svg
             className="edit-button"
             xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +52,13 @@ export default function FinanceCard({ date: timestamp, name, sum }) {
           </svg>
         </div>
 
-        <div className="btn-container">
+        <div
+          className="btn-container"
+          onClick={() => {
+            confirm("Are you sure?");
+            deleteRecord(id);
+          }}
+        >
           <svg
             className="delete-button"
             xmlns="http://www.w3.org/2000/svg"

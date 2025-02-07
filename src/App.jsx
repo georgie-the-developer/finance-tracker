@@ -1,4 +1,4 @@
-import { useState, use, Suspense, useEffect } from "react";
+import { useState, useId, Suspense, useEffect } from "react";
 import FinanceCard from "./components/FinanceCard";
 import RecordEditor from "./components/RecordEditor";
 import config from "./config.json";
@@ -7,6 +7,8 @@ function App() {
   const [sortBy, setSortBy] = useState("most-recent");
   const [recordEditorOpen, setRecordEditorOpen] = useState(false);
   const [recordEditorData, setRecordEditorData] = useState({
+    id: "",
+    key: useId(),
     name: "",
     sum: "",
     date: "",
@@ -53,6 +55,23 @@ function App() {
       default:
         return b.date - a.date || b.id - a.id;
     }
+  };
+  const editRecord = (id, name, sum, date) => {
+    setRecordEditorData({ id: id, name: name, sum: sum, date: date });
+    setRecordEditorOpen(true);
+    setIndicator((prevVal) => prevVal + 1);
+  };
+  const deleteRecord = (id) => {
+    let records =
+      JSON.parse(localStorage.getItem(config.RECORDS_STORAGE_NAME)) ?? [];
+    let newRecords = records.filter((record) => {
+      return record.id !== id;
+    });
+    localStorage.setItem(
+      config.RECORDS_STORAGE_NAME,
+      JSON.stringify(newRecords)
+    );
+    setIndicator((prevVal) => prevVal + 1);
   };
   const openRecordEditor = (name = "", sum = "", date = "") => {
     setRecordEditorOpen(true);
@@ -136,9 +155,12 @@ function App() {
                     return (
                       <FinanceCard
                         key={record.id}
+                        id={record.id}
                         date={record.date}
                         name={record.name}
                         sum={record.sum}
+                        editRecord={editRecord}
+                        deleteRecord={deleteRecord}
                       />
                     );
                   })}
@@ -153,6 +175,8 @@ function App() {
               onClick={() => closeRecordEditor()}
             ></div>
             <RecordEditor
+              key={recordEditorData.key}
+              id={recordEditorData.id}
               name={recordEditorData.name}
               sum={recordEditorData.sum}
               date={recordEditorData.date}

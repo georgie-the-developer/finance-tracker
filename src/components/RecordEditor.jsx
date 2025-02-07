@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import config from "../config.json";
 export default function RecordEditor({
+  id,
   name: initialName,
   sum: initialSum,
   date: initialDate,
@@ -14,6 +15,12 @@ export default function RecordEditor({
       ? new Date(initialDate).toISOString().split("T")[0]
       : new Date(Date.now()).toISOString().split("T")[0]
   );
+  useEffect(() => {
+    setName(initialName);
+    setSum(initialSum);
+    setDate(new Date(initialDate || Date.now()).toISOString().split("T")[0]);
+  }, [initialName, initialSum, initialDate]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let retrievedVals = localStorage.getItem(config.RECORDS_STORAGE_NAME);
@@ -21,11 +28,28 @@ export default function RecordEditor({
     if (!records) {
       records = [];
     }
-    let id = Date.now();
-    console.log(new Date(new Date(date).getTime()).toISOString().split("T")[0]);
-    let dateToSet = new Date(date).getTime();
-    records.push({ id: id, date: dateToSet, name: name, sum: sum });
-    localStorage.setItem(config.RECORDS_STORAGE_NAME, JSON.stringify(records));
+    // if record is being created
+    if (!id) {
+      let newId = Date.now();
+      let dateToSet = new Date(date).getTime();
+      records.push({ id: newId, date: dateToSet, name: name, sum: sum });
+      localStorage.setItem(
+        config.RECORDS_STORAGE_NAME,
+        JSON.stringify(records)
+      );
+    }
+    //if record is being edited
+    else {
+      let dateToSet = new Date(date).getTime();
+      let updatedRecords = records.filter((record) => {
+        return record.id !== id;
+      });
+      updatedRecords.push({ id: id, date: dateToSet, name: name, sum: sum });
+      localStorage.setItem(
+        config.RECORDS_STORAGE_NAME,
+        JSON.stringify(updatedRecords)
+      );
+    }
     setIndicator((prevVal) => prevVal + 1);
     setName("");
     setSum("");
