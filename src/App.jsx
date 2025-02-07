@@ -122,6 +122,10 @@ function App() {
           <div className="finance-records__container">
             <div className="sort-container">
               <div className="sort-current-value">{getSortByHumanized()}</div>
+              <div
+                className={"sort-overlay" + (isSortOpen ? " open" : "")}
+                onClick={() => setIsSortOpen(false)}
+              ></div>
               <div className="sort-dropdown">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
