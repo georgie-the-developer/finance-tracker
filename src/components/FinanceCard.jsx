@@ -31,8 +31,9 @@ export default function FinanceCard({
       <div
         className="action-delete"
         onClick={() => {
-          confirm("Are you sure?");
-          deleteRecord(id);
+          if (confirm("Are you sure?") == true) {
+            deleteRecord(id);
+          }
         }}
       >
         Delete
@@ -55,8 +56,9 @@ export default function FinanceCard({
         <div
           className="btn-container"
           onClick={() => {
-            confirm("Are you sure?");
-            deleteRecord(id);
+            if (confirm("Are you sure?") == true) {
+              deleteRecord(id);
+            }
           }}
         >
           <svg
