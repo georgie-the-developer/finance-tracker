@@ -18,6 +18,8 @@ function App() {
   );
   //Used to update records whenever a new one is added without a reload
   const [indicator, setIndicator] = useState(0);
+  //Alert for confirming a deletion of a record
+  const [confirmAlertOpen, setConfirmAlertOpen] = useState(false);
   useEffect(() => {
     const storedRecords = localStorage.getItem(config.RECORDS_STORAGE_NAME);
     if (storedRecords) {
@@ -153,21 +155,25 @@ function App() {
             </div>
             <div className="finance-cards-container">
               <Suspense fallback={<div className="loading">Loading ...</div>}>
-                {records
-                  .sort((a, b) => sortRecords(a, b, sortBy))
-                  .map((record) => {
-                    return (
-                      <FinanceCard
-                        key={record.id}
-                        id={record.id}
-                        date={record.date}
-                        name={record.name}
-                        sum={record.sum}
-                        editRecord={editRecord}
-                        deleteRecord={deleteRecord}
-                      />
-                    );
-                  })}
+                {records.length != 0 ? (
+                  records
+                    .sort((a, b) => sortRecords(a, b, sortBy))
+                    .map((record) => {
+                      return (
+                        <FinanceCard
+                          key={record.id}
+                          id={record.id}
+                          date={record.date}
+                          name={record.name}
+                          sum={record.sum}
+                          editRecord={editRecord}
+                          deleteRecord={deleteRecord}
+                        />
+                      );
+                    })
+                ) : (
+                  <div className="no-cards">Nothing here yet...</div>
+                )}
               </Suspense>
             </div>
           </div>

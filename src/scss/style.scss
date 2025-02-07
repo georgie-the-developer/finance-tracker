@@ -85,6 +85,9 @@ body,
       display: flex;
       flex-direction: column;
       align-items: center;
+      .no-cards {
+        font-size: 1.5em;
+      }
     }
   }
 }
