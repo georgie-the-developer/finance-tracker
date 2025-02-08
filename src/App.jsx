@@ -5,6 +5,9 @@ import config from "./config.json";
 function App() {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState("most-recent");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filterBy, setFilterBy] = useState("all");
+
   const [recordEditorOpen, setRecordEditorOpen] = useState(false);
   const [recordEditorData, setRecordEditorData] = useState({
     id: "",
@@ -75,6 +78,26 @@ function App() {
         return b.date - a.date || b.id - a.id;
     }
   };
+  const changeFilterState = (val) => {
+    setFilterBy(val);
+    setIsFilterOpen(false);
+  };
+  const getFilterByHumanized = () => {
+    switch (filterBy) {
+      case "all":
+        return "All";
+      case "today":
+        return "Today";
+      case "last-week":
+        return "Last week";
+      case "last-month":
+        return "Last month";
+      case "last-year":
+        return "Last year";
+      default:
+        return "All";
+    }
+  };
   const editRecord = (id, name, sum, date) => {
     setRecordEditorData({ id: id, name: name, sum: sum, date: date });
     setRecordEditorOpen(true);
@@ -135,13 +158,48 @@ function App() {
                     : "$" + overallBalance}
                 </span>
               </div>
-              <select name="" id="" className="filter-dropdown">
-                <option value="all-time">All time</option>
-                <option value="today">Today</option>
-                <option value="last-week">Last week</option>
-                <option value="last-month">Last month</option>
-                <option value="last-year">Last year</option>
-              </select>
+              <div className="filter-container">
+                <div
+                  className={"sort-overlay" + (isFilterOpen ? " open" : "")}
+                  onClick={() => setIsFilterOpen(false)}
+                ></div>
+                <div className="filter-dropdown">
+                  <div
+                    className="filter-button"
+                    onClick={() => setIsFilterOpen((prevValue) => !prevValue)}
+                  >
+                    <div className="filter-current-value">
+                      {getFilterByHumanized()}
+                    </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 320 512"
+                    >
+                      {/* <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--> */}
+                      <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
+                    </svg>
+                  </div>
+                  {isFilterOpen && (
+                    <>
+                      <ul className="dropdown-list">
+                        <li onClick={() => changeFilterState("all")}>All</li>
+                        <li onClick={() => changeFilterState("today")}>
+                          Today
+                        </li>
+                        <li onClick={() => changeFilterState("last-week")}>
+                          Last week
+                        </li>
+                        <li onClick={() => changeFilterState("last-month")}>
+                          Last month
+                        </li>
+                        <li onClick={() => changeFilterState("last-year")}>
+                          Last year
+                        </li>
+                      </ul>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
             <div className="chart-container">
               <div className="line-chart"></div>
