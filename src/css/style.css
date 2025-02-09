@@ -71,7 +71,7 @@ body,
   display: flex;
   justify-content: center;
 }
-.hero .hero-card .chart-container .line-chart {
+.hero .hero-card .chart-container .bar-chart {
   width: 90%;
 }
 
