@@ -1,28 +1,9 @@
-import { useState, useId, Suspense, useEffect, useRef } from "react";
+import { lazy, useState, useId, Suspense, useEffect, useRef } from "react";
 import FinanceCard from "./components/FinanceCard";
 import RecordEditor from "./components/RecordEditor";
+import BarChart from "./components/BarChart";
 import config from "./config.json";
-import {
-  Chart,
-  BarController,
-  BarElement,
-  PointElement,
-  LinearScale,
-  Title,
-  CategoryScale,
-  Tooltip,
-} from "chart.js";
 function App() {
-  //Register value types used in chart draw
-  Chart.register(
-    BarController,
-    BarElement,
-    PointElement,
-    LinearScale,
-    Title,
-    CategoryScale,
-    Tooltip
-  );
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState("most-recent");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -43,8 +24,6 @@ function App() {
   const [overallBalance, setOverallBalance] = useState(
     JSON.parse(localStorage.getItem(config.BALANCE_VALUE_STORAGE_NAME)) ?? 0
   );
-  const chartRef = useRef(null); // Create a ref for the chart canvas
-  const chartInstance = useRef(null); // Keep track of the Chart instance
   const calculateOverallBalance = (records) => {
     if (!records) {
       setOverallBalance(0);
@@ -59,20 +38,15 @@ function App() {
   //Used to update records whenever a new one is added without a reload
   const [indicator, setIndicator] = useState(0);
   //Alert for confirming a deletion of a record
-  useEffect(() => {
-    const storedRecords = localStorage.getItem(config.RECORDS_STORAGE_NAME);
-    if (storedRecords) {
-      setRecords(JSON.parse(storedRecords));
-    }
-  }, [indicator]);
+  // useEffect(() => {
+  //   const storedRecords = localStorage.getItem(config.RECORDS_STORAGE_NAME);
+  //   if (storedRecords) {
+  //     setRecords(JSON.parse(storedRecords));
+  //   }
+  // }, [indicator]);
   useEffect(() => {
     calculateOverallBalance(records);
   }, [records]);
-  useEffect(() => {
-    //A case where records are empty is not handled in any way
-    //so, this can be maid into a component
-    drawLineChart(records, filterBy);
-  }, [records, filterBy]);
   const changeSortState = (val) => {
     setSortBy(val);
     setIsSortOpen(false);
@@ -161,169 +135,7 @@ function App() {
       return true;
     }
   };
-  // Function that is called to draw a chart in bar-chart canvas
-  const drawLineChart = (records, filterBy) => {
-    if (!records) return;
-    //Get chart's ref or fail
-    if (!chartRef.current) return;
-    //If older Chart instance is in use, remove it
-    if (chartInstance.current) chartInstance.current.destroy();
-
-    /* Custom functions for inner use */
-
-    // Get a start of a first day of the current...
-
-    // ...week...
-    const getStartOfWeekTimestamp = () => {
-      const now = new Date();
-      const dayOfWeek = now.getUTCDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
-      const startOfWeek = new Date(
-        Date.UTC(
-          now.getUTCFullYear(),
-          now.getUTCMonth(),
-          now.getUTCDate() - dayOfWeek
-        )
-      );
-      return startOfWeek.getTime();
-    };
-
-    // ...month...
-    const getStartOfMonthTimestamp = () => {
-      const now = new Date();
-      const startOfMonth = new Date(
-        Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)
-      );
-      return startOfMonth.getTime();
-    };
-
-    // ...year...
-    const getStartOfYearTimestamp = () => {
-      const now = new Date();
-      const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
-      return startOfYear.getTime();
-    };
-    // ...as a timestamp
-
-    // Get month name based on a number. Months start with 0 as Jan.
-    const getShortMonthName = (monthNumber) => {
-      return new Date(
-        Date.UTC(today.getFullYear(), monthNumber + 1, 1)
-      ).toLocaleString("default", { month: "short" });
-    };
-
-    let startDate = 0;
-    let labels;
-    let today = new Date();
-
-    /* Filter flag (startDate) setup and labels specification */
-
-    switch (filterBy) {
-      case "this-week":
-        startDate = getStartOfWeekTimestamp();
-        labels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        break;
-      case "this-month":
-        startDate = getStartOfMonthTimestamp();
-        let daysCount = new Date(
-          today.getUTCFullYear(),
-          today.getUTCMonth() + 1,
-          0
-        ).getDate();
-        if (!daysCount) return;
-        let month = today.getUTCMonth() + 1;
-        labels = Array.from({ length: daysCount }, (_, i) => {
-          let d = i + 1;
-          return d + "/" + month;
-        });
-        break;
-      case "this-year":
-        startDate = getStartOfYearTimestamp();
-        labels = Array.from({ length: 12 }, (_, i) => {
-          return getShortMonthName(i);
-        });
-        break;
-      // "all" case is handled as default, so it has been removed for avoiding code duplication
-      default:
-        let mostRecent = records.sort((a, b) =>
-          sortRecords(a, b, "most-recent")
-        );
-        let newestYear = new Date(mostRecent[0].date).getFullYear();
-        let oldestYear = new Date(
-          mostRecent[mostRecent.length - 1].date
-        ).getFullYear();
-        labels = Array.from({ length: newestYear - oldestYear + 1 }, (_, i) => {
-          return oldestYear + i;
-        });
-        break;
-    }
-
-    /* Record filtering logic */
-    const filterRecordsByStartDate = (records, startDate = 0) => {
-      if (!records) return;
-      let filteredRecords = records
-        .filter((record) => {
-          return record.date > startDate;
-        })
-        // For proper from-left-to-right charting
-        .sort((a, b) => sortRecords(a, b, "oldest"));
-      return filteredRecords;
-    };
-
-    /* Aggregating data */
-    const aggregatedData = labels.map((label) => {
-      let filteredRecords = filterRecordsByStartDate(records, startDate);
-      let sum = filteredRecords
-        .filter((record) => {
-          let date = new Date(record.date);
-          switch (filterBy) {
-            case "this-week":
-              return (
-                date.toLocaleDateString("default", { weekday: "short" }) ===
-                label
-              );
-            case "this-month":
-              return `${date.getUTCDate()}/${date.getUTCMonth() + 1}` === label;
-            case "this-year":
-              return (
-                date.toLocaleString("default", { month: "short" }) === label
-              );
-            default:
-              return date.getFullYear() === label;
-          }
-        })
-        .reduce((acc, record) => acc + Number(record.sum), 0);
-      return sum;
-    });
-
-    /* Finally, the chart paint */
-    const backgroundColors = aggregatedData.map((value) =>
-      value < 0 ? "rgba(255, 67, 67, 0.7)" : "rgba(115, 255, 136, 0.7)"
-    );
-    const data = {
-      labels: labels,
-      datasets: [
-        {
-          label: "Sum",
-          data: aggregatedData,
-          backgroundColor: backgroundColors,
-          borderColor: "rgba(0, 0, 0, 0.1)",
-          borderWidth: 1,
-        },
-      ],
-    };
-    const config = {
-      type: "bar",
-      data: data,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: { beginAtZero: true },
-        },
-      },
-    };
-    chartInstance.current = new Chart(chartRef.current, config);
-  };
+  const LazyBarChart = lazy(() => import("./components/BarChart"));
   return (
     <>
       <div className={"main" + (anyAlertOpen() ? " no-scroll" : "")}>
@@ -387,50 +199,52 @@ function App() {
               </div>
             </div>
             <div className="chart-container">
-              <canvas
-                className="bar-chart"
-                ref={chartRef}
-                id="bar-chart"
-              ></canvas>
+              <Suspense fallback={<div className="">Loading</div>}>
+                <LazyBarChart
+                  sortRecords={sortRecords}
+                  records={records}
+                  filterBy={filterBy}
+                />
+              </Suspense>
             </div>
           </div>
         </section>
         <section className="finance-records">
-          <div className="finance-records__container">
-            <div className="sort-container">
-              <div className="sort-current-value">{getSortByHumanized()}</div>
-              <div
-                className={"sort-overlay" + (isSortOpen ? " open" : "")}
-                onClick={() => setIsSortOpen(false)}
-              ></div>
-              <div className="sort-dropdown">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 320 512"
-                  onClick={() => setIsSortOpen((prevValue) => !prevValue)}
-                >
-                  {/* <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 25 Fonticons, Inc.--> */}
-                  <path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z" />
-                </svg>
-                {isSortOpen && (
-                  <ul className="dropdown-list">
-                    <li onClick={() => changeSortState("most-recent")}>
-                      Most recent
-                    </li>
-                    <li onClick={() => changeSortState("oldest")}>Oldest</li>
-                    <li onClick={() => changeSortState("sum-desc")}>
-                      Sum of money (desc.)
-                    </li>
-                    <li onClick={() => changeSortState("sum-asc")}>
-                      Sum of money (asc.)
-                    </li>
-                  </ul>
-                )}
+          <Suspense fallback={<div className="loading">Loading ...</div>}>
+            <div className="finance-records__container">
+              <div className="sort-container">
+                <div className="sort-current-value">{getSortByHumanized()}</div>
+                <div
+                  className={"sort-overlay" + (isSortOpen ? " open" : "")}
+                  onClick={() => setIsSortOpen(false)}
+                ></div>
+                <div className="sort-dropdown">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 320 512"
+                    onClick={() => setIsSortOpen((prevValue) => !prevValue)}
+                  >
+                    {/* <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 25 Fonticons, Inc.--> */}
+                    <path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z" />
+                  </svg>
+                  {isSortOpen && (
+                    <ul className="dropdown-list">
+                      <li onClick={() => changeSortState("most-recent")}>
+                        Most recent
+                      </li>
+                      <li onClick={() => changeSortState("oldest")}>Oldest</li>
+                      <li onClick={() => changeSortState("sum-desc")}>
+                        Sum of money (desc.)
+                      </li>
+                      <li onClick={() => changeSortState("sum-asc")}>
+                        Sum of money (asc.)
+                      </li>
+                    </ul>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="finance-cards-container">
-              <Suspense fallback={<div className="loading">Loading ...</div>}>
-                {records.length != 0 ? (
+              <div className="finance-cards-container">
+                {records && records.length != 0 ? (
                   records
                     .sort((a, b) => sortRecords(a, b, sortBy))
                     .map((record) => {
@@ -449,9 +263,9 @@ function App() {
                 ) : (
                   <div className="no-cards">Nothing here yet...</div>
                 )}
-              </Suspense>
+              </div>
             </div>
-          </div>
+          </Suspense>
         </section>
         <div className={"editor-alert" + (recordEditorOpen ? " open" : "")}>
           <>
