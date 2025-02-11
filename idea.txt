@@ -7,3 +7,10 @@ Basic functionality:
         - be able to add new expense info (specify a sum of money, a type (expense or income), a category and date (optionally));
     Statistics page:
         - display one filter-sensitive dynamic chart (you can filter the info by date / category / type; you can also choose the chart type (pie or columns))
+
+How should charts work:
+ - last week: every expense of past 7 days, sorted by date, if there are multiple expenses during one day they are reduced to one, labels are weekdays, shortened;
+ - last month: every expense of past 30 days, sorted by date, if there are multiple expenses during one day they are reduced to one, labels are day numbers + number of month;
+ - last year: expense chart where each datapoint is a reduced value of a particular month, labels are months.
+ - if bar goes below zero, it is red, if it is higher than zero, it is green. if a value is 0 the place for that bar should still be reserved.
+
