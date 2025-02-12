@@ -18,7 +18,8 @@ function App() {
     date: "",
   });
   const [records, setRecords] = useState(
-    JSON.parse(localStorage.getItem(config.RECORDS_STORAGE_NAME)) ?? []
+    // JSON.parse(localStorage.getItem(config.RECORDS_STORAGE_NAME)) ?? []
+    null
   );
   //Overall balance
   const [overallBalance, setOverallBalance] = useState(
@@ -37,12 +38,14 @@ function App() {
   };
   //Used to update records whenever a new one is added without a reload
   const [indicator, setIndicator] = useState(0);
-  //Alert for confirming a deletion of a record
   useEffect(() => {
-    const storedRecords = localStorage.getItem(config.RECORDS_STORAGE_NAME);
-    if (storedRecords) {
-      setRecords(JSON.parse(storedRecords));
-    }
+    const timeout = setTimeout(() => {
+      const storedRecords =
+        JSON.parse(localStorage.getItem(config.RECORDS_STORAGE_NAME)) ?? [];
+      setRecords(storedRecords);
+    }, 2000); // Simulate lazy load
+
+    return () => clearTimeout(timeout); // Cleanup
   }, [indicator]);
   useEffect(() => {
     calculateOverallBalance(records);
