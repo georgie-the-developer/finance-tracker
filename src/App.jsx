@@ -232,13 +232,11 @@ function App() {
               </div>
             </div>
             <div className="chart-container">
-              <Suspense fallback={<Loading />}>
-                <BarChart
-                  sortRecords={sortRecords}
-                  records={records}
-                  filterBy={filterBy}
-                />
-              </Suspense>
+              <BarChart
+                sortRecords={sortRecords}
+                records={records}
+                filterBy={filterBy}
+              />
             </div>
           </div>
         </section>
