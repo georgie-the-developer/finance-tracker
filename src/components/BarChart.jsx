@@ -158,7 +158,7 @@ export default function BarChart({ sortRecords, records, filterBy }) {
 
     /* Finally, the chart paint */
     const backgroundColors = aggregatedData.map((value) =>
-      value < 0 ? "rgba(255, 67, 67, 0.7)" : "rgb(75, 214, 96)"
+      value < 0 ? "rgb(255, 67, 67)" : "rgb(75, 214, 96)"
     );
     const data = {
       labels: labels,
