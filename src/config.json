@@ -1,4 +1,5 @@
 {
     "RECORDS_STORAGE_NAME" : "finance-records",
-    "BALANCE_VALUE_STORAGE_NAME" : "overall-balance"
+    "BALANCE_VALUE_STORAGE_NAME" : "overall-balance",
+    "THEME_VALUE_LOCATION_NAME": "theme"
 }
