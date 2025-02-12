@@ -38,12 +38,12 @@ function App() {
   //Used to update records whenever a new one is added without a reload
   const [indicator, setIndicator] = useState(0);
   //Alert for confirming a deletion of a record
-  // useEffect(() => {
-  //   const storedRecords = localStorage.getItem(config.RECORDS_STORAGE_NAME);
-  //   if (storedRecords) {
-  //     setRecords(JSON.parse(storedRecords));
-  //   }
-  // }, [indicator]);
+  useEffect(() => {
+    const storedRecords = localStorage.getItem(config.RECORDS_STORAGE_NAME);
+    if (storedRecords) {
+      setRecords(JSON.parse(storedRecords));
+    }
+  }, [indicator]);
   useEffect(() => {
     calculateOverallBalance(records);
   }, [records]);
