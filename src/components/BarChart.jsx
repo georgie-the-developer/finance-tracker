@@ -186,7 +186,7 @@ export default function BarChart({ sortRecords, records, filterBy }) {
   };
   useEffect(() => {
     setError(<div className="chart-error">No records yet.</div>);
-    if (records) {
+    if (records && records.length != 0) {
       drawLineChart(records, filterBy);
       setError(null);
     }
