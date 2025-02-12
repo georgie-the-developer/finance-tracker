@@ -194,7 +194,7 @@ export default function BarChart({ sortRecords, records, filterBy }) {
   }, [records, filterBy]);
   return (
     <>
-      {records && (
+      {records && records.length != 0 && (
         <canvas className="bar-chart" ref={chartRef} id="bar-chart"></canvas>
       )}
       {error}
