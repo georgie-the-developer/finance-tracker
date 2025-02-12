@@ -3,6 +3,7 @@
   --background-color: rgb(238, 238, 238);
   --card-bg-color: rgb(228, 228, 228);
   --balance-heading-font-size: 2em;
+  --text-color: #000;
 }
 
 html {
@@ -20,9 +21,15 @@ body,
 }
 
 .main {
+  color: var(--text-color);
   width: 100vw;
   min-height: 100vh;
   font-family: "Roboto";
+}
+.main.dark-theme {
+  --background-color: rgb(42, 42, 42);
+  --card-bg-color: rgb(38, 37, 37);
+  --text-color: #cbcbcb;
 }
 .main.no-scroll {
   max-height: 100vh;
@@ -256,6 +263,7 @@ body,
   bottom: 0;
   right: 0;
   width: 100%;
+  color: var(--text-color);
 }
 .editor-alert.open {
   height: 100%;
@@ -315,6 +323,8 @@ body,
   font-size: 1.5em;
 }
 .editor-form .inputs-container .input-group__input {
+  color: var(--text-color);
+  background-color: var(--background-color);
   font-size: 1em;
   border: 1px solid #000;
   border-radius: 5px;
@@ -357,6 +367,7 @@ body,
   right: 0%;
   width: 50%;
   height: 50%;
+  fill: var(--text-color);
 }
 
 .loading-container {
@@ -394,6 +405,8 @@ body,
   width: 90%;
 }
 .search-container .input-container__input {
+  color: var(--text-color);
+  background-color: var(--card-bg-color);
   width: 100%;
   font-size: 1.2em;
   padding: 10px 0;
