@@ -14,8 +14,18 @@ export default function Search({ records, setFilteredRecords, indicator }) {
 
     if (searchTerm) {
       setFilteredRecords(
-        records.filter((record) =>
-          record.name.toLowerCase().includes(searchTerm)
+        records.filter(
+          (record) =>
+            record.name.toLowerCase().includes(searchTerm) ||
+            new Date(record.date)
+              .toLocaleString("default", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "2-digit",
+                timeZone: "Europe/London",
+              })
+              .toLowerCase()
+              .includes(searchTerm)
         )
       );
     } else {
@@ -29,7 +39,7 @@ export default function Search({ records, setFilteredRecords, indicator }) {
         <input
           type="text"
           className="input-container__input"
-          placeholder="Search a record by name..."
+          placeholder="Search a record by name or date..."
           onChange={searchRecords}
           value={search}
         />
