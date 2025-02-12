@@ -140,7 +140,6 @@ function App() {
       return true;
     }
   };
-  const LazyBarChart = lazy(() => import("./components/BarChart"));
   const getRecords = (records, filteredRecords) => {
     // Loading when records == null
     if (!records) return <Loading />;
@@ -234,7 +233,7 @@ function App() {
             </div>
             <div className="chart-container">
               <Suspense fallback={<Loading />}>
-                <LazyBarChart
+                <BarChart
                   sortRecords={sortRecords}
                   records={records}
                   filterBy={filterBy}
