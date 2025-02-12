@@ -50,7 +50,7 @@ function App() {
         JSON.parse(localStorage.getItem(config.RECORDS_STORAGE_NAME)) ?? [];
       setRecords(storedRecords);
       setFilteredRecords(storedRecords);
-    }, 2000); // Simulate lazy load
+    }, 1000); // Simulate lazy load
 
     return () => clearTimeout(timeout); // Cleanup
   }, [indicator]);
