@@ -396,7 +396,9 @@ body,
   max-width: 100%;
   .input-container {
     margin-top: 20px;
-    width: 90%;
+    width: 95%;
+    display: flex;
+    justify-content: center;
     &__input {
       color: var(--text-color);
       background-color: var(--card-bg-color);
@@ -405,7 +407,7 @@ body,
       padding: 10px 0;
       padding-left: 10px;
       border-radius: 7px;
-      border: 1px solid #000;
+      border: none;
     }
   }
 }
