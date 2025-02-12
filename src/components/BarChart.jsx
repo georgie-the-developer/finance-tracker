@@ -185,10 +185,11 @@ export default function BarChart({ sortRecords, records, filterBy }) {
     chartInstance.current = new Chart(chartRef.current, config);
   };
   useEffect(() => {
-    if (!records) {
-      setError(<div className="chart-error">No records yet.</div>);
+    setError(<div className="chart-error">No records yet.</div>);
+    if (records) {
+      drawLineChart(records, filterBy);
+      setError(null);
     }
-    drawLineChart(records, filterBy);
     return () => chartInstance.current?.destroy();
   }, [records, filterBy]);
   return (
