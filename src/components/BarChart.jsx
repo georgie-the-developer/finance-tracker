@@ -19,6 +19,7 @@ export default function BarChart({ sortRecords, records, filterBy }) {
     CategoryScale,
     Tooltip
   );
+  const [error, setError] = useState(null);
   const chartRef = useRef(null); // Create a ref for the chart canvas
   const chartInstance = useRef(null); // Keep track of the Chart instance
   const drawLineChart = (records, filterBy = "") => {
@@ -184,8 +185,18 @@ export default function BarChart({ sortRecords, records, filterBy }) {
     chartInstance.current = new Chart(chartRef.current, config);
   };
   useEffect(() => {
+    if (!records) {
+      setError(<div className="chart-error">No records yet.</div>);
+    }
     drawLineChart(records, filterBy);
     return () => chartInstance.current?.destroy();
   }, [records, filterBy]);
-  return <canvas className="bar-chart" ref={chartRef} id="bar-chart"></canvas>;
+  return (
+    <>
+      {records && (
+        <canvas className="bar-chart" ref={chartRef} id="bar-chart"></canvas>
+      )}
+      {error}
+    </>
+  );
 }

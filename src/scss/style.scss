@@ -68,6 +68,16 @@ body,
       .bar-chart {
         width: 90%;
       }
+      .chart-error {
+        // position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 1.5em;
+      }
     }
   }
 }

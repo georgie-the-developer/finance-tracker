@@ -74,6 +74,15 @@ body,
 .hero .hero-card .chart-container .bar-chart {
   width: 90%;
 }
+.hero .hero-card .chart-container .chart-error {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 1.5em;
+}
 
 .finance-records {
   margin-top: 50px;
