@@ -3,6 +3,7 @@ import FinanceCard from "./components/FinanceCard";
 import RecordEditor from "./components/RecordEditor";
 import BarChart from "./components/BarChart";
 import config from "./config.json";
+import Loading from "./components/Loading";
 function App() {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState("most-recent");
@@ -202,7 +203,7 @@ function App() {
               </div>
             </div>
             <div className="chart-container">
-              <Suspense fallback={<div className="">Loading</div>}>
+              <Suspense fallback={<Loading />}>
                 <LazyBarChart
                   sortRecords={sortRecords}
                   records={records}
@@ -213,41 +214,41 @@ function App() {
           </div>
         </section>
         <section className="finance-records">
-          <Suspense fallback={<div className="loading">Loading ...</div>}>
-            <div className="finance-records__container">
-              <div className="sort-container">
-                <div className="sort-current-value">{getSortByHumanized()}</div>
-                <div
-                  className={"sort-overlay" + (isSortOpen ? " open" : "")}
-                  onClick={() => setIsSortOpen(false)}
-                ></div>
-                <div className="sort-dropdown">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 320 512"
-                    onClick={() => setIsSortOpen((prevValue) => !prevValue)}
-                  >
-                    {/* <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 25 Fonticons, Inc.--> */}
-                    <path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z" />
-                  </svg>
-                  {isSortOpen && (
-                    <ul className="dropdown-list">
-                      <li onClick={() => changeSortState("most-recent")}>
-                        Most recent
-                      </li>
-                      <li onClick={() => changeSortState("oldest")}>Oldest</li>
-                      <li onClick={() => changeSortState("sum-desc")}>
-                        Sum of money (desc.)
-                      </li>
-                      <li onClick={() => changeSortState("sum-asc")}>
-                        Sum of money (asc.)
-                      </li>
-                    </ul>
-                  )}
-                </div>
+          <div className="finance-records__container">
+            <div className="sort-container">
+              <div className="sort-current-value">{getSortByHumanized()}</div>
+              <div
+                className={"sort-overlay" + (isSortOpen ? " open" : "")}
+                onClick={() => setIsSortOpen(false)}
+              ></div>
+              <div className="sort-dropdown">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 320 512"
+                  onClick={() => setIsSortOpen((prevValue) => !prevValue)}
+                >
+                  {/* <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 25 Fonticons, Inc.--> */}
+                  <path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z" />
+                </svg>
+                {isSortOpen && (
+                  <ul className="dropdown-list">
+                    <li onClick={() => changeSortState("most-recent")}>
+                      Most recent
+                    </li>
+                    <li onClick={() => changeSortState("oldest")}>Oldest</li>
+                    <li onClick={() => changeSortState("sum-desc")}>
+                      Sum of money (desc.)
+                    </li>
+                    <li onClick={() => changeSortState("sum-asc")}>
+                      Sum of money (asc.)
+                    </li>
+                  </ul>
+                )}
               </div>
-              <div className="finance-cards-container">
-                {records && records.length != 0 ? (
+            </div>
+            <div className="finance-cards-container">
+              {records ? (
+                records.length != 0 ? (
                   records
                     .sort((a, b) => sortRecords(a, b, sortBy))
                     .map((record) => {
@@ -265,10 +266,12 @@ function App() {
                     })
                 ) : (
                   <div className="no-cards">Nothing here yet...</div>
-                )}
-              </div>
+                )
+              ) : (
+                <Loading />
+              )}
             </div>
-          </Suspense>
+          </div>
         </section>
         <div className={"editor-alert" + (recordEditorOpen ? " open" : "")}>
           <>

@@ -9,6 +9,7 @@ import {
   CategoryScale,
   Tooltip,
 } from "chart.js";
+import Loading from "./Loading";
 export default function BarChart({ sortRecords, records, filterBy }) {
   Chart.register(
     BarController,
@@ -185,10 +186,16 @@ export default function BarChart({ sortRecords, records, filterBy }) {
     chartInstance.current = new Chart(chartRef.current, config);
   };
   useEffect(() => {
-    setError(<div className="chart-error">No records yet.</div>);
-    if (records && records.length != 0) {
-      drawLineChart(records, filterBy);
-      setError(null);
+    // records == null
+    setError(<Loading />);
+    if (records) {
+      // records == []
+      setError(<div className="chart-error">No records yet.</div>);
+      if (records.length != 0) {
+        //records == [...someValues]
+        drawLineChart(records, filterBy);
+        setError(null);
+      }
     }
     return () => chartInstance.current?.destroy();
   }, [records, filterBy]);
