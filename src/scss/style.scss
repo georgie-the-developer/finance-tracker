@@ -96,6 +96,7 @@ body,
       align-items: center;
       .no-cards {
         font-size: 1.5em;
+        text-align: center;
       }
     }
   }
@@ -378,5 +379,22 @@ body,
     }
   }
 }
-
+.search-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  .input-container {
+    margin-top: 20px;
+    width: 90%;
+    &__input {
+      width: 100%;
+      font-size: 1.2em;
+      padding: 10px 0;
+      padding-left: 10px;
+      border-radius: 7px;
+      border: 1px solid #000;
+    }
+  }
+}
 @import "_media-queries";

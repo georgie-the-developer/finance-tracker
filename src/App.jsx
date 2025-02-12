@@ -4,6 +4,7 @@ import RecordEditor from "./components/RecordEditor";
 import BarChart from "./components/BarChart";
 import config from "./config.json";
 import Loading from "./components/Loading";
+import Search from "./components/Search";
 function App() {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState("most-recent");
@@ -18,10 +19,9 @@ function App() {
     sum: "",
     date: "",
   });
-  const [records, setRecords] = useState(
-    // JSON.parse(localStorage.getItem(config.RECORDS_STORAGE_NAME)) ?? []
-    null
-  );
+  const [records, setRecords] = useState(null);
+  //Filtered records to enable searching
+  const [filteredRecords, setFilteredRecords] = useState(null);
   //Overall balance
   const [overallBalance, setOverallBalance] = useState(
     JSON.parse(localStorage.getItem(config.BALANCE_VALUE_STORAGE_NAME)) ?? 0
@@ -44,6 +44,7 @@ function App() {
       const storedRecords =
         JSON.parse(localStorage.getItem(config.RECORDS_STORAGE_NAME)) ?? [];
       setRecords(storedRecords);
+      setFilteredRecords(storedRecords);
     }, 2000); // Simulate lazy load
 
     return () => clearTimeout(timeout); // Cleanup
@@ -140,6 +141,35 @@ function App() {
     }
   };
   const LazyBarChart = lazy(() => import("./components/BarChart"));
+  const getRecords = (records, filteredRecords) => {
+    // Loading when records == null
+    if (!records) return <Loading />;
+    // Message in case records == []
+    if (records.length == 0)
+      return <div className="no-cards">Nothing here yet...</div>;
+    // Shouldnt happen though, because filtered records should be equal to records after each reload
+    if (!filteredRecords) return <div>Failed to set filtered records</div>;
+    // Message in case search didn't give any results
+    if (filteredRecords.length == 0)
+      return <div className="no-cards">No records follow such name patten</div>;
+
+    //Now that everything is successful, return filtered records
+    return filteredRecords
+      .sort((a, b) => sortRecords(a, b, sortBy))
+      .map((record) => {
+        return (
+          <FinanceCard
+            key={record.id}
+            id={record.id}
+            date={record.date}
+            name={record.name}
+            sum={record.sum}
+            editRecord={editRecord}
+            deleteRecord={deleteRecord}
+          />
+        );
+      });
+  };
   return (
     <>
       <div className={"main" + (anyAlertOpen() ? " no-scroll" : "")}>
@@ -246,30 +276,19 @@ function App() {
                 )}
               </div>
             </div>
+            <Search
+              key={useId()}
+              records={records}
+              filteredRecords={filteredRecords}
+              setFilteredRecords={setFilteredRecords}
+              indicator={indicator}
+            />
             <div className="finance-cards-container">
-              {records ? (
-                records.length != 0 ? (
-                  records
-                    .sort((a, b) => sortRecords(a, b, sortBy))
-                    .map((record) => {
-                      return (
-                        <FinanceCard
-                          key={record.id}
-                          id={record.id}
-                          date={record.date}
-                          name={record.name}
-                          sum={record.sum}
-                          editRecord={editRecord}
-                          deleteRecord={deleteRecord}
-                        />
-                      );
-                    })
-                ) : (
-                  <div className="no-cards">Nothing here yet...</div>
-                )
-              ) : (
-                <Loading />
-              )}
+              {
+                // Much cleaner now. I suppose You will agree that reading a function is much
+                // more comfortable than reading html/jsx inside the return statement
+                getRecords(records, filteredRecords)
+              }
             </div>
           </div>
         </section>
