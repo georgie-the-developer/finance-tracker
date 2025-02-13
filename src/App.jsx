@@ -174,7 +174,6 @@ function App() {
         );
       });
   };
-  const toggleTheme = () => {};
   return (
     <>
       <div className={"main " + theme + (anyAlertOpen() ? " no-scroll" : "")}>
