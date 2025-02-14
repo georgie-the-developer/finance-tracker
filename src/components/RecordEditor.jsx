@@ -96,11 +96,27 @@ export default function RecordEditor({
           </label>
           <input
             className="input-group__input"
-            type="number"
+            type="text"
+            inputMode="numeric"
+            pattern="-?[0-9]*\.?[0-9]{0,2}"
             id="finance-record-sum"
             name="finance-record-sum"
             value={sum}
-            onChange={(e) => setSum(e.target.value)}
+            onChange={(e) => {
+              let value = e.target.value;
+
+              // Allow negative sign, numbers, and only one decimal point
+              if (/^-?\d*\.?\d*$/.test(value)) {
+                // If a decimal exists, round to two decimal places
+                if (Number(value) > 100000 || Number(value) < -100000) return;
+                if (value.includes(".")) {
+                  const [intPart, decimalPart] = value.split(".");
+                  value = `${intPart}.${decimalPart.slice(0, 2)}`; // Keep only 2 decimal places
+                }
+
+                setSum(value); // Update state with the valid value
+              }
+            }}
             placeholder="Sum of money (can be negative)"
             max={100000}
             required
