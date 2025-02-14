@@ -26,7 +26,7 @@ export default function RecordEditor({
   useEffect(() => {
     setName(initialName);
     setSum(initialSum);
-    setDate(new Date(initialDate || Date.now()).toISOString().split("T")[0]);
+    setDate(formatDateToUTC(initialDate || Date.now()));
   }, [initialName, initialSum, initialDate]);
 
   const handleSubmit = (e) => {
@@ -61,7 +61,7 @@ export default function RecordEditor({
     setIndicator((prevVal) => prevVal + 1);
     setName("");
     setSum("");
-    setDate(new Date(Date.now()).toISOString().split("T")[0]);
+    setDate(formatDateToUTC(Date.now()));
     closeAlert();
   };
   return (
