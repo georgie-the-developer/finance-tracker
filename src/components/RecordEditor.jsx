@@ -10,10 +10,18 @@ export default function RecordEditor({
 }) {
   const [name, setName] = useState(initialName);
   const [sum, setSum] = useState(initialSum);
+  //Ensure date is locale-independent
+  const formatDateToUTC = (timestamp) => {
+    const date = new Date(timestamp);
+    return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(date.getUTCDate()).padStart(2, "0")}`;
+  };
   const [date, setDate] = useState(
     initialDate != ""
-      ? new Date(initialDate).toISOString().split("T")[0]
-      : new Date(Date.now()).toISOString().split("T")[0]
+      ? formatDateToUTC(initialDate)
+      : formatDateToUTC(Date.now())
   );
   useEffect(() => {
     setName(initialName);
