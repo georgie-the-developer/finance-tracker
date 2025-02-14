@@ -18,15 +18,23 @@ export default function RecordEditor({
       "0"
     )}-${String(date.getUTCDate()).padStart(2, "0")}`;
   };
+  const formatDateToLocal = (timestamp) => {
+    const date = new Date(timestamp);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(date.getDate()).padStart(2, "0")}`;
+  };
+
   const [date, setDate] = useState(
     initialDate != ""
-      ? formatDateToUTC(initialDate)
-      : formatDateToUTC(Date.now())
+      ? formatDateToLocal(initialDate)
+      : formatDateToLocal(Date.now())
   );
   useEffect(() => {
     setName(initialName);
     setSum(initialSum);
-    setDate(formatDateToUTC(initialDate || Date.now()));
+    setDate(formatDateToLocal(initialDate || Date.now()));
   }, [initialName, initialSum, initialDate]);
 
   const handleSubmit = (e) => {
@@ -61,7 +69,7 @@ export default function RecordEditor({
     setIndicator((prevVal) => prevVal + 1);
     setName("");
     setSum("");
-    setDate(formatDateToUTC(Date.now()));
+    setDate(formatDateToLocal(Date.now()));
     closeAlert();
   };
   return (
