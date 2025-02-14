@@ -7,7 +7,7 @@ export default function FinanceCard({
   editRecord,
   deleteRecord,
 }) {
-  const date = new Intl.DateTimeFormat("default", {
+  const date = new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
     month: "2-digit",
     year: "2-digit",

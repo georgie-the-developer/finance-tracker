@@ -69,7 +69,7 @@ export default function BarChart({ sortRecords, records, filterBy }) {
     const getShortMonthName = (monthNumber) => {
       return new Date(
         Date.UTC(today.getFullYear(), monthNumber + 1, 1)
-      ).toLocaleString("default", { month: "short" });
+      ).toLocaleString("en-US", { month: "short" });
     };
 
     let startDate = 0;
@@ -139,15 +139,12 @@ export default function BarChart({ sortRecords, records, filterBy }) {
           switch (filterBy) {
             case "this-week":
               return (
-                date.toLocaleDateString("default", { weekday: "short" }) ===
-                label
+                date.toLocaleDateString("en-US", { weekday: "short" }) === label
               );
             case "this-month":
               return `${date.getUTCDate()}/${date.getUTCMonth() + 1}` === label;
             case "this-year":
-              return (
-                date.toLocaleString("default", { month: "short" }) === label
-              );
+              return date.toLocaleString("en-US", { month: "short" }) === label;
             default:
               return date.getFullYear() === label;
           }

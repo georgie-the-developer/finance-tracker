@@ -18,7 +18,7 @@ export default function Search({ records, setFilteredRecords, indicator }) {
           (record) =>
             record.name.toLowerCase().includes(searchTerm) ||
             new Date(record.date)
-              .toLocaleString("default", {
+              .toLocaleString("en-US", {
                 day: "2-digit",
                 month: "2-digit",
                 year: "2-digit",
