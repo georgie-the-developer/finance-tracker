@@ -33,17 +33,14 @@ export default function BarChart({ sortRecords, records, filterBy }) {
     /* Custom functions for inner use */
 
     // Get a start of a first day of the current...
+    //Now it works with local time instead of UTC
 
     // ...week...
     const getStartOfWeekTimestamp = () => {
       const now = new Date();
-      const dayOfWeek = now.getUTCDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
+      const dayOfWeek = now.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
       const startOfWeek = new Date(
-        Date.UTC(
-          now.getUTCFullYear(),
-          now.getUTCMonth(),
-          now.getUTCDate() - dayOfWeek
-        )
+        new Date(now.getFullYear(), now.getMonth(), now.getDate() - dayOfWeek)
       );
       return startOfWeek.getTime();
     };
@@ -52,7 +49,7 @@ export default function BarChart({ sortRecords, records, filterBy }) {
     const getStartOfMonthTimestamp = () => {
       const now = new Date();
       const startOfMonth = new Date(
-        Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)
+        new Date(now.getFullYear(), now.getMonth(), 1)
       );
       return startOfMonth.getTime();
     };
@@ -60,7 +57,7 @@ export default function BarChart({ sortRecords, records, filterBy }) {
     // ...year...
     const getStartOfYearTimestamp = () => {
       const now = new Date();
-      const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
       return startOfYear.getTime();
     };
     // ...as a timestamp
