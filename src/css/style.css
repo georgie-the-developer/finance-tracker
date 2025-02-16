@@ -360,6 +360,7 @@ body,
 }
 .filter-container .filter-dropdown .filter-button .filter-current-value {
   font-size: 1em;
+  margin-right: 10px;
 }
 .filter-container .filter-dropdown .filter-button svg {
   position: absolute;
